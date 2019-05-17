@@ -1,0 +1,18 @@
+travelbook:
+  datasource:
+    jdbc-url: "jdbc:mysql://localhost:3306/travelbook"
+    username: root
+    password: 1234
+    ddl: update
+    show-sql: true
+    create-scheme-ddl-script: false
+  
+  # Default definition
+  default:
+    currency: JPY
+    
+  security:
+    # RSA key pair for generating JSON Web Token(JWT)
+    jwt:
+      private-key-path: "C:/temp/private.key"
+      public-key-path: "C:/temp/public.key"
