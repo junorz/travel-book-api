@@ -31,6 +31,13 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travelbook_id", referencedColumnName = "id")
     private TravelBook travelBook;
+    
+    public static Member findById(String id, Repository rep) { 
+        List<Member> memberList = rep.em().createQuery("SELECT m FROM Member m WHERE m.id = ?1", Member.class)
+                .setParameter(1, id)
+                .getResultList();
+        return memberList.size() > 0 ? memberList.get(0) : null;
+    }
 
     public static Member create(String travelBookId, String memberName, Repository rep) {
         List<TravelBook> travelBookList = rep.em()
@@ -45,5 +52,11 @@ public class Member {
             return member;
         }
         return null;
+    }
+    
+    public static Member delete(String travelBookId, String memberId, Repository rep) {
+        Member member = findById(memberId, rep);
+        rep.em().remove(member);
+        return member;
     }
 }

@@ -25,6 +25,7 @@ import com.junorz.travelbook.context.dto.TravelBookCreateDto;
 import com.junorz.travelbook.context.dto.TravelBookDto;
 import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.context.response.Status;
+import com.junorz.travelbook.domain.AccessUrl;
 import com.junorz.travelbook.domain.TravelBook;
 import com.junorz.travelbook.service.AccessUrlService;
 import com.junorz.travelbook.service.TravelBookService;
@@ -56,9 +57,15 @@ public class TravelBookController {
 
     @GetMapping("/{url}")
     public ResponseEntity<Response> findByUrl(@PathVariable("url") String url) {
-        TravelBook travelBook = accessUrlService.findByUrl(url).getTravelBook();
+        AccessUrl accessUrl = accessUrlService.findByUrl(url);
+        String message = null;
+        if (accessUrl == null) {
+            message = messageSource.getMessage(Messages.NO_ACCESSURL_FOUND, null, Locale.getDefault());
+            return ResponseEntity.status(HttpStatus.OK).body(Response.of(null, message, Status.FAILED));
+        }
+        TravelBook travelBook = accessUrl.getTravelBook();
         TravelBookDto data = TravelBookDto.of(travelBook);
-        String message = messageSource.getMessage(Messages.FETCH_TRAVELBOOK_BY_URL_SUCCESS, null, Locale.getDefault());
+        message = messageSource.getMessage(Messages.FETCH_TRAVELBOOK_BY_URL_SUCCESS, null, Locale.getDefault());
         return ResponseEntity.status(HttpStatus.OK).body(Response.of(data, message, Status.SUCCESS));
     }
 
@@ -78,7 +85,7 @@ public class TravelBookController {
     // Enter password and get a jwt token
     @PostMapping("/login")
     public ResponseEntity<Response> login(@RequestBody Map<String, String> res) {
-        String id = res.get("travel-book-id");
+        String id = res.get("travelBookId");
         String password = res.get("password");
         String message = null;
         if (StringUtils.isNotEmpty(id) && StringUtils.isNotEmpty(password)) {

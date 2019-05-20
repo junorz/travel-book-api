@@ -16,4 +16,5 @@ public class CurrencyUtilTest {
     public void doExchangeTest() {
         System.out.println(CurrencyUtil.doExchange(Currency.CNY, Currency.JPY, "2000"));
     }
+    
 }

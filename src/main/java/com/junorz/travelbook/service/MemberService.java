@@ -21,5 +21,9 @@ public class MemberService {
     public Member create(String travelBookId, String memberName) {
         return TxManager.of(txm).tx(() -> Member.create(travelBookId, memberName, rep));
     }
+    
+    public Member delete(String travelBookId, String memberId) {
+        return TxManager.of(txm).tx(() -> Member.delete(travelBookId, memberId, rep));
+    }
 
 }
