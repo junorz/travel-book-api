@@ -25,14 +25,13 @@ public class TxManager {
 
     public <T> T tx(Supplier<T> supplier) {
         return txTemplate.execute(status -> {
-            T result = null;
             try {
                 return supplier.get();
             } catch (Exception e) {
                 status.setRollbackOnly();
                 logger.error("The transaction has been rolled back due to an exception occurred.", e);
+                throw e;
             }
-            return result;
         });
     }
 
@@ -43,6 +42,7 @@ public class TxManager {
             } catch (Exception e) {
                 status.setRollbackOnly();
                 logger.error("The transaction has been rolled back due to an exception occurred.", e);
+                throw e;
             }
             return null;
         });

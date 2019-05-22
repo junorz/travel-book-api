@@ -1,8 +1,12 @@
 package com.junorz.travelbook.context.dto;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.junorz.travelbook.domain.Detail;
+import com.junorz.travelbook.domain.Member;
 import com.junorz.travelbook.domain.TravelBook;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +28,9 @@ public class TravelBookDto {
     public static TravelBookDto of(TravelBook travelBook) {
         return new TravelBookDto(travelBook.getId(), travelBook.getName(), travelBook.getAccessUrl().getUrl(),
                 travelBook.getCurrency().toString(),
-                travelBook.getMemeberList().stream().map(member -> MemberDto.of(member)).collect(Collectors.toList()),
-                travelBook.getDetailList().stream().map(detail -> DetailDto.of(detail)).collect(Collectors.toList()));
+                Optional.ofNullable(travelBook.getMemeberList()).orElse(new ArrayList<Member>()).stream()
+                        .map(member -> MemberDto.of(member)).collect(Collectors.toList()),
+                Optional.ofNullable(travelBook.getDetailList()).orElse(new ArrayList<Detail>()).stream()
+                        .map(detail -> DetailDto.of(detail)).collect(Collectors.toList()));
     }
 }

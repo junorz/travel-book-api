@@ -12,15 +12,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.junorz.travelbook.config.AppConfig.DefaultValue;
 import com.junorz.travelbook.context.ApplicationInfo;
 import com.junorz.travelbook.context.ApplicationInfo.TokenInfo;
+import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.utils.JWTUtil;
 
 import lombok.Data;
@@ -28,8 +31,9 @@ import lombok.Data;
 @Configuration
 @EnableConfigurationProperties(DefaultValue.class)
 @EnableScheduling
+@EnableAspectJAutoProxy
 public class AppConfig {
-    
+
     public static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
     @ConfigurationProperties
@@ -45,25 +49,35 @@ public class AppConfig {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
-    
+
     @Bean
     public LocalValidatorFactoryBean getValidator(MessageSource messageSource) {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
         validatorFactoryBean.setValidationMessageSource(messageSource);
         return validatorFactoryBean;
     }
-    
+
     @Bean
     public JWTUtil jwtUtil() {
         return new JWTUtil();
     }
-    
+
     @Bean
     @Scope(value = "application")
     public ApplicationInfo applicationInfo() {
         return new ApplicationInfo();
     }
     
+    @Bean
+    public Response response() {
+        return new Response(messageSource());
+    }
+    
+    @Bean
+    public Hibernate5Module jsonHibernate5Lazy() {
+        return new Hibernate5Module();
+    }
+
     // clear token histories every 1 hour
     @Scheduled(cron = "* */60 * * * ?")
     public void clearTokenHistories() {

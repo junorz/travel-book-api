@@ -23,6 +23,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 
+/**
+ * Do authentication for every request.<br>
+ * This filter will get token from request header, and current travelbook's ID from request body.<br>
+ * So be sure you have contained travelbook's ID in every request body, or the authentication will failed.
+ */
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private JWTUtil jwtUtil;

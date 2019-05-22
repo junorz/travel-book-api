@@ -17,8 +17,8 @@ import lombok.Data;
 public class SecondaryCategory {
     
     @Id
-    @GeneratedValue(generator = "idGenerator")
-    @GenericGenerator(name = "idGenerator", strategy = "native")
+    @GeneratedValue(generator = "scIdGen")
+    @GenericGenerator(name = "scIdGen", strategy = "native")
     private long id;
     
     @NotNull

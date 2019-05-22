@@ -1,18 +1,17 @@
 package com.junorz.travelbook.controller;
 
-import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,40 +21,50 @@ import com.junorz.travelbook.context.dto.MemberCreateDto;
 import com.junorz.travelbook.context.dto.MemberDto;
 import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.context.response.Status;
+import com.junorz.travelbook.context.validator.ValidateType;
+import com.junorz.travelbook.context.validator.Validator;
+import com.junorz.travelbook.domain.Member;
 import com.junorz.travelbook.service.MemberService;
+import com.junorz.travelbook.utils.ControllerUtil;
 
 @RestController
-@RequestMapping("/travelbooks/members")
+@RequestMapping("/api/travelbooks/members")
 @CrossOrigin("*")
 public class MemberController {
 
     private final MemberService memberService;
-    private final MessageSource messageSource;
+    private final Response response;
 
-    public MemberController(MemberService memberService, MessageSource messageSource) {
+    public MemberController(MemberService memberService, Response response) {
         this.memberService = memberService;
-        this.messageSource = messageSource;
+        this.response = response;
     }
 
     @PostMapping("/create")
     public ResponseEntity<Response> create(@Valid @RequestBody MemberCreateDto dto) {
-        MemberDto data = MemberDto.of(memberService.create(dto.getTravelBookId(), dto.getMemberName()));
-        String message = messageSource.getMessage(Messages.MEMBER_CREATE_SUCCESS, null, Locale.getDefault());
-        return ResponseEntity.status(HttpStatus.OK).body(Response.of(data, message, Status.SUCCESS));
+        MemberDto data = MemberDto.of(memberService.create(dto));
+        return ControllerUtil.ok(response.of(data, Messages.MEMBER_CREATE_SUCCESS));
     }
-    
+
+    @PutMapping("/{id}/edit")
+    public ResponseEntity<Response> edit(@PathVariable("id") String id, @Valid @RequestBody MemberCreateDto dto) {
+        Member member = memberService.edit(id, dto);
+        Validator.validate(ValidateType.REQUIRED, member, Messages.MEMBER_EDIT_FAILED);
+        MemberDto data = MemberDto.of(member);
+        return ControllerUtil.ok(response.of(data, Messages.MEMBER_EDIT_SUCCESS));
+    }
+
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Response> delete(@PathVariable("id") String id, @RequestBody Map<String, String> params) {
         String travelBookId = params.get("travelBookId");
-        String memberId = params.get("memberId");
-        String message = null;
-        if (StringUtils.isEmpty(travelBookId) || StringUtils.isEmpty(memberId) || !id.equals(memberId)) {
-            message = messageSource.getMessage(Messages.MEMBER_DELETE_FAILED, null, Locale.getDefault());
-            return ResponseEntity.status(HttpStatus.OK).body(Response.of(null, message, Status.FAILED));
+        if (StringUtils.isEmpty(travelBookId) || StringUtils.isEmpty(id)) {
+            return ControllerUtil.badRequest(response.of(null, Messages.MEMBER_DELETE_FAILED, Status.FAILED));
         }
-        MemberDto data = MemberDto.of(memberService.delete(travelBookId, memberId));
-        message = messageSource.getMessage(Messages.MEMBER_DELETE_SUCCESS, null, Locale.getDefault());
-        return ResponseEntity.status(HttpStatus.OK).body(Response.of(data, message, Status.SUCCESS));
+        Member member = memberService.delete(id);
+        Validator.validate(ValidateType.REQUIRED, member, Messages.MEMBER_DELETE_FAILED);
+        
+        MemberDto data = MemberDto.of(member);
+        return ResponseEntity.status(HttpStatus.OK).body(response.of(data, Messages.MEMBER_DELETE_SUCCESS));
     }
 
 }

@@ -38,10 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.authorizeRequests().antMatchers("/travelbooks/members/**").hasRole("ADMIN")
-                .antMatchers("/travelbooks/details/**/create").hasRole("ADMIN")
-                .antMatchers("/travelbooks/details/**/edit").hasRole("ADMIN")
-                .antMatchers("/travelbooks/details/**/delete").hasRole("ADMIN").anyRequest().permitAll();
+        http.authorizeRequests()
+                .antMatchers("/api/travelbooks/**/delete").hasRole("ADMIN")
+                .antMatchers("/api/travelbooks/**/edit").hasRole("ADMIN")
+                .antMatchers("/api/travelbooks/members/**").hasRole("ADMIN")
+                .antMatchers("/api/travelbooks/details/**/create").hasRole("ADMIN")
+                .antMatchers("/api/travelbooks/details/**/edit").hasRole("ADMIN")
+                .antMatchers("/api/travelbooks/details/**/delete").hasRole("ADMIN").anyRequest().permitAll();
     }
 
     @Bean

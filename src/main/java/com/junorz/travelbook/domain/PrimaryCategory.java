@@ -18,8 +18,8 @@ import lombok.Data;
 public class PrimaryCategory {
 
     @Id
-    @GeneratedValue(generator = "idGenerator")
-    @GenericGenerator(name = "idGenerator", strategy = "native")
+    @GeneratedValue(generator = "pcIdGen")
+    @GenericGenerator(name = "pcIdGen", strategy = "native")
     private long id;
 
     @NotNull

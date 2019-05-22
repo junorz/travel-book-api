@@ -3,6 +3,7 @@ package com.junorz.travelbook.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.junorz.travelbook.context.dto.MemberCreateDto;
 import com.junorz.travelbook.context.orm.Repository;
 import com.junorz.travelbook.context.orm.TxManager;
 import com.junorz.travelbook.domain.Member;
@@ -18,12 +19,16 @@ public class MemberService {
         this.txm = txm;
     }
     
-    public Member create(String travelBookId, String memberName) {
-        return TxManager.of(txm).tx(() -> Member.create(travelBookId, memberName, rep));
+    public Member create(MemberCreateDto dto) {
+        return TxManager.of(txm).tx(() -> Member.create(dto, rep));
     }
     
-    public Member delete(String travelBookId, String memberId) {
-        return TxManager.of(txm).tx(() -> Member.delete(travelBookId, memberId, rep));
+    public Member edit(String memberId, MemberCreateDto dto) {
+        return TxManager.of(txm).tx(() -> Member.edit(memberId, dto, rep));
+    }
+    
+    public Member delete(String memberId) {
+        return TxManager.of(txm).tx(() -> Member.delete(memberId, rep));
     }
 
 }

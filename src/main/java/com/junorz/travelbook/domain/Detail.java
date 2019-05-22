@@ -27,8 +27,8 @@ import lombok.Data;
 public class Detail {
 
     @Id
-    @GeneratedValue(generator = "idGenerator")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid2")
+    @GeneratedValue(generator = "detailIdGen")
+    @GenericGenerator(name = "detailIdGen", strategy = "uuid2")
     private String id;
 
     @ManyToOne
