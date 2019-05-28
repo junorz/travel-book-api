@@ -25,6 +25,7 @@ import com.junorz.travelbook.context.ApplicationInfo;
 import com.junorz.travelbook.context.ApplicationInfo.TokenInfo;
 import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.utils.JWTUtil;
+import com.junorz.travelbook.utils.MessageUtil;
 
 import lombok.Data;
 
@@ -51,6 +52,11 @@ public class AppConfig {
     }
 
     @Bean
+    MessageUtil messageUtil() {
+        return new MessageUtil(messageSource());
+    }
+
+    @Bean
     public LocalValidatorFactoryBean getValidator(MessageSource messageSource) {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
         validatorFactoryBean.setValidationMessageSource(messageSource);
@@ -67,19 +73,19 @@ public class AppConfig {
     public ApplicationInfo applicationInfo() {
         return new ApplicationInfo();
     }
-    
+
     @Bean
     public Response response() {
         return new Response(messageSource());
     }
-    
+
     @Bean
     public Hibernate5Module jsonHibernate5Lazy() {
         return new Hibernate5Module();
     }
 
     // clear token histories every 1 hour
-    @Scheduled(cron = "* */60 * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void clearTokenHistories() {
         ApplicationInfo applicationInfo = applicationInfo();
         logger.info("Start to clear token historires.");

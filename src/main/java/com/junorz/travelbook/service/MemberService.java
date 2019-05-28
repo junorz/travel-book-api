@@ -20,15 +20,15 @@ public class MemberService {
     }
     
     public Member create(MemberCreateDto dto) {
-        return TxManager.of(txm).tx(() -> Member.create(dto, rep));
+        return TxManager.of(txm).tx(() -> Member.create(dto, rep)).orElse(null);
     }
     
     public Member edit(String memberId, MemberCreateDto dto) {
-        return TxManager.of(txm).tx(() -> Member.edit(memberId, dto, rep));
+        return TxManager.of(txm).tx(() -> Member.edit(memberId, dto, rep)).orElse(null);
     }
     
     public Member delete(String memberId) {
-        return TxManager.of(txm).tx(() -> Member.delete(memberId, rep));
+        return TxManager.of(txm).tx(() -> Member.delete(memberId, rep)).orElse(null);
     }
 
 }

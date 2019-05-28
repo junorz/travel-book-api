@@ -1,8 +1,7 @@
 package com.junorz.travelbook.context.response;
 
-import java.util.Locale;
-
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,7 +38,7 @@ public class Response {
     }
 
     private String getMsgWithoutArgs(String messageCode) {
-        return messageSource.getMessage(messageCode, null, Locale.getDefault());
+        return messageSource.getMessage(messageCode, null, LocaleContextHolder.getLocale());
     }
 
 }

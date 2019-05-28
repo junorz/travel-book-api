@@ -2,7 +2,8 @@ package com.junorz.travelbook.service;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -11,15 +12,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.google.common.base.Strings;
+import com.junorz.travelbook.context.consts.Messages;
 import com.junorz.travelbook.context.dto.TravelBookCreateDto;
 import com.junorz.travelbook.context.orm.Repository;
 import com.junorz.travelbook.context.orm.TxManager;
 import com.junorz.travelbook.context.security.JWTAuthenticationToken;
 import com.junorz.travelbook.domain.TravelBook;
 import com.junorz.travelbook.utils.JWTUtil;
+import com.junorz.travelbook.utils.MessageUtil;
 
 @Service
 public class TravelBookService {
+    
+    private final Logger logger = LoggerFactory.getLogger(TravelBookService.class);
 
     private final Repository rep;
     private final PlatformTransactionManager txm;
@@ -51,16 +57,16 @@ public class TravelBookService {
     
     public TravelBook edit(String id, String name, String adminPassword, String currency) {
         // skip password encoding if new password is not set.
-        String encodedAdminPassword = StringUtils.isNotBlank(adminPassword) ? passwordEncoder.encode(adminPassword) : null;
-        return TxManager.of(txm).tx(() -> TravelBook.edit(id, name, encodedAdminPassword, currency, rep));
+        String encodedAdminPassword = !Strings.isNullOrEmpty(adminPassword) ? passwordEncoder.encode(adminPassword) : null;
+        return TxManager.of(txm).tx(() -> TravelBook.edit(id, name, encodedAdminPassword, currency, rep)).orElse(null);
     }
 
     public TravelBook delete(String id) {
-        return TxManager.of(txm).tx(() -> TravelBook.delete(id, rep));
+        return TxManager.of(txm).tx(() -> TravelBook.delete(id, rep)).orElse(null);
     }
 
     public String login(String id, String password) {
-        TravelBook travelBook = TxManager.of(txm).tx(() -> TravelBook.findById(id, rep));
+        TravelBook travelBook = TxManager.of(txm).tx(() -> TravelBook.findById(id, rep)).orElse(null);
         if (travelBook == null) {
             return null;
         }
@@ -70,6 +76,8 @@ public class TravelBookService {
             Authentication authentication = new JWTAuthenticationToken(id,
                     AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            logger.info(MessageUtil.getMessage(Messages.LOG_AUTHENTICATION_SUCCESS), id);
             return token;
         }
         return null;

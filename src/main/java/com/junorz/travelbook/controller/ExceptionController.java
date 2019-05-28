@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.junorz.travelbook.context.consts.Messages;
+import com.junorz.travelbook.context.exception.InvalidOperationException;
+import com.junorz.travelbook.context.exception.ResourceNotFoundException;
+import com.junorz.travelbook.context.exception.ValidationException;
 import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.context.response.Status;
-import com.junorz.travelbook.context.validator.InvalidOperationException;
-import com.junorz.travelbook.context.validator.ValidationException;
 import com.junorz.travelbook.utils.ControllerUtil;
 
 import lombok.Data;
@@ -60,6 +61,12 @@ public class ExceptionController {
     @ResponseBody
     public ResponseEntity<Response> handleInvalidOperationException(InvalidOperationException e) {
         return ControllerUtil.forbidden(response.of(null, e.getMessage(), Status.FAILED));
+    }
+    
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<Response> handleResourceNotFoundException(ResourceNotFoundException e) {
+        return ControllerUtil.notFound(response.of(null, e.getMessage(), Status.FAILED));
     }
 
     @Data

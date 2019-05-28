@@ -21,6 +21,7 @@ public interface Messages {
     public static String MEMBER_EDIT_FAILED = "MEMBER_EDIT_FAILED";
     public static String MEMBER_DELETE_SUCCESS = "MEMBER_DELETE_SUCCESS";
     public static String MEMBER_DELETE_FAILED = "MEMBER_DELETE_FAILED";
+    public static String MEMBER_NOT_FOUND = "MEMBER_NOT_FOUND";
 
     // AccessUrl
     public static String NO_ACCESSURL_FOUND = "NO_ACCESSURL_FOUND";
@@ -30,9 +31,23 @@ public interface Messages {
 
     // Detail
     public static String DETAIL_CREATE_SUCCESS = "DETAIL_CREATE_SUCCESS";
+    public static String DETAIL_EDIT_SUCCESS = "DETAIL_EDIT_SUCCESS";
+    public static String DETAIL_NOT_FOUND = "DETAIL_NOT_FOUND";
+    public static String DETAIL_DELETE_SUCCESS = "DETAIL_DELETE_SUCCESS";
+    
+    // Primary Category
+    public static String PRIMARY_CATEGORY_NOT_FOUND = "PRIMARY_CATEGORY_NOT_FOUND";
+    
+    // Secondary Category
+    public static String SECONDARY_CATEGORY_NOT_FOUND = "SECONDARY_CATEGORY_NOT_FOUND";
 
     // System
     public static String BAD_REQUEST = "BAD_REQUEST";
     public static String FORBIDDEN = "FORBIDDEN";
     public static String INVALID_OPERATION = "INVALID_OPERATION";
+    
+    // Logger
+    public static String LOG_AUTHENTICATION_SUCCESS = "LOG_AUTHENTICATION_SUCCESS";
+    public static String LOG_TRAVELBOOK_CREATE_SUCCESS = "LOG_TRAVELBOOK_CREATE_SUCCESS";
+    public static String LOG_MEMBER_CREATE_SUCCESS = "LOG_MEMBER_CREATE_SUCCESS";
 }

@@ -23,4 +23,12 @@ public class DetailService {
         return TxManager.of(txm).tx(() -> Detail.create(dto, rep));
     }
     
+    public Detail edit(String id, DetailCreateDto dto) {
+        return TxManager.of(txm).tx(() -> Detail.edit(id, dto, rep));
+    }
+    
+    public Detail delete(String id) {
+        return TxManager.of(txm).tx(() -> Detail.delete(id, rep));
+    }
+    
 }

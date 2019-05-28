@@ -1,6 +1,7 @@
 package com.junorz.travelbook.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.junorz.travelbook.context.orm.Repository;
 
 import lombok.Data;
 
@@ -27,5 +30,9 @@ public class PrimaryCategory {
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "primaryCategory")
     private List<SecondaryCategory> secondaryCategoryList;
+    
+    public static Optional<PrimaryCategory> findById(long id, Repository rep) {
+        return Optional.ofNullable(rep.em().find(PrimaryCategory.class, id));
+    }
 
 }

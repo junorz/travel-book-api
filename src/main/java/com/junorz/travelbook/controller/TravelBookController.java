@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.junorz.travelbook.context.consts.Messages;
 import com.junorz.travelbook.context.dto.TravelBookCreateDto;
 import com.junorz.travelbook.context.dto.TravelBookDto;
@@ -29,12 +31,15 @@ import com.junorz.travelbook.context.validator.Validator;
 import com.junorz.travelbook.domain.TravelBook;
 import com.junorz.travelbook.service.TravelBookService;
 import com.junorz.travelbook.utils.ControllerUtil;
+import com.junorz.travelbook.utils.MessageUtil;
 
 @RestController
 @RequestMapping("/api/travelbooks")
 @CrossOrigin("*")
 public class TravelBookController {
 
+    private static final Logger logger = LoggerFactory.getLogger(TravelBookController.class);
+    
     private final TravelBookService travelBookService;
     private final Response response;
 
@@ -74,6 +79,7 @@ public class TravelBookController {
         Validator.validate(ValidateType.REQUIRED, currency, Messages.BAD_REQUEST);
         
         TravelBook travelBook = travelBookService.edit(id, name, adminPassword, currency);
+        Validator.validate(ValidateType.REQUIRED, travelBook, Messages.NO_TRAVELBOOK_FOUND);
         TravelBookDto data = TravelBookDto.of(travelBook);
         return ControllerUtil.ok(response.of(data, Messages.TRAVELBOOK_EDIT_SUCCESS));
     }
@@ -84,6 +90,7 @@ public class TravelBookController {
         Validator.validateTbId(id, idInBody);
 
         TravelBook travelBook = travelBookService.delete(id);
+        Validator.validate(ValidateType.REQUIRED, travelBook, Messages.NO_TRAVELBOOK_FOUND);
         TravelBookDto data = TravelBookDto.of(travelBook);
         return ControllerUtil.ok(response.of(data, Messages.TRAVELBOOK_DELETE_SUCCESS));
     }
@@ -94,6 +101,7 @@ public class TravelBookController {
         Validator.validate(ValidateType.REQUIRED, travelBook, Messages.TRAVELBOOK_CREATE_FAILED);
 
         TravelBookDto data = TravelBookDto.of(travelBook);
+        logger.info(MessageUtil.getMessage(Messages.LOG_TRAVELBOOK_CREATE_SUCCESS), data.getId());
         return ControllerUtil.ok(response.of(data, Messages.TRAVELBOOK_CREATE_SUCCESS));
     }
 
@@ -102,7 +110,7 @@ public class TravelBookController {
     public ResponseEntity<Response> login(@RequestBody Map<String, String> res) {
         String id = res.get("travelBookId");
         String password = res.get("password");
-        if (StringUtils.isNotEmpty(id) && StringUtils.isNotEmpty(password)) {
+        if (!Strings.isNullOrEmpty(id) && !Strings.isNullOrEmpty(password)) {
             String token = travelBookService.login(id, password);
             if (token != null) {
                 return ControllerUtil.ok(response.of(token, Messages.AUTHENTICATION_SUCCESS));

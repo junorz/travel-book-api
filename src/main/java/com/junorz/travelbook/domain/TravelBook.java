@@ -2,6 +2,7 @@ package com.junorz.travelbook.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,9 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.google.common.base.Strings;
 import com.junorz.travelbook.context.consts.Currency;
 import com.junorz.travelbook.context.dto.TravelBookCreateDto;
 import com.junorz.travelbook.context.orm.Repository;
@@ -58,19 +59,18 @@ public class TravelBook {
     private LocalDateTime createDateTime;
 
     public static List<TravelBook> findAll(Repository rep) {
-        return rep.em().createQuery("SELECT tb FROM TravelBook tb WHERE tb.isAvaliable = true", TravelBook.class)
-                .getResultList();
+        return rep.em().createQuery("SELECT tb FROM TravelBook tb", TravelBook.class).getResultList();
     }
 
-    public static TravelBook findById(String id, Repository rep) {
-        TravelBook travelBook = rep.em().find(TravelBook.class, id);
-        return travelBook.isAvaliable() ? travelBook : null;
+    public static Optional<TravelBook> findById(String id, Repository rep) {
+        Optional<TravelBook> travelBookOpt = Optional.ofNullable(rep.em().find(TravelBook.class, id));
+        return (travelBookOpt.isPresent() && travelBookOpt.get().isAvaliable()) ? travelBookOpt : Optional.empty();
     }
-    
+
     public static TravelBook findByUrl(String url, Repository rep) {
-        List<TravelBook> travelBookList = rep.em().createQuery("SELECT tb FROM TravelBook tb WHERE tb.accessUrl = ?1", TravelBook.class)
-                .setParameter(1, AccessUrl.findByUrl(url, rep))
-                .getResultList();
+        List<TravelBook> travelBookList = rep.em()
+                .createQuery("SELECT tb FROM TravelBook tb WHERE tb.accessUrl = ?1 AND tb.isAvaliable = true", TravelBook.class)
+                .setParameter(1, AccessUrl.findByUrl(url, rep)).getResultList();
         return travelBookList.size() == 0 ? null : travelBookList.get(0);
     }
 
@@ -108,24 +108,29 @@ public class TravelBook {
 
         return travelBook;
     }
-    
-    public static TravelBook edit(String id, String name, String adminPassword, String currency, Repository rep) {
-        TravelBook travelBook = TravelBook.findById(id, rep);
-        travelBook.setName(name);
-        if (StringUtils.isNotEmpty(adminPassword)) {
-            // The password is already encoded in service layer
-            travelBook.setAdminPassword(adminPassword);
-        }
-        travelBook.setCurrency(Currency.valueOf(currency));
-        rep.em().merge(travelBook);
-        return travelBook;
+
+    public static Optional<TravelBook> edit(String id, String name, String adminPassword, String currency,
+            Repository rep) {
+        Optional<TravelBook> travelBookOpt = TravelBook.findById(id, rep);
+        travelBookOpt.ifPresent(t -> {
+            t.setName(name);
+            if (!Strings.isNullOrEmpty(adminPassword)) {
+                // The password is already encoded in service layer
+                t.setAdminPassword(adminPassword);
+            }
+            t.setCurrency(Currency.valueOf(currency));
+            rep.em().merge(t);
+        });
+        return travelBookOpt;
     }
 
-    public static TravelBook delete(String id, Repository rep) {
-        TravelBook travelBook = TravelBook.findById(id, rep);
-        travelBook.setAvaliable(false);
-        rep.em().merge(travelBook);
-        return travelBook;
+    public static Optional<TravelBook> delete(String id, Repository rep) {
+        Optional<TravelBook> travelBookOpt = TravelBook.findById(id, rep);
+        travelBookOpt.ifPresent(t -> {
+            t.setAvaliable(false);
+            rep.em().merge(t);
+        });
+        return travelBookOpt;
     }
 
 }

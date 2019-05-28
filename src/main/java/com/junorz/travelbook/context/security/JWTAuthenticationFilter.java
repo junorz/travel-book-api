@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import com.junorz.travelbook.utils.JWTUtil;
 
 import io.jsonwebtoken.Claims;
@@ -65,7 +65,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        if (StringUtils.isNotEmpty(token) && StringUtils.isNotEmpty(travelBookId)) {
+        if (!Strings.isNullOrEmpty(token) && !Strings.isNullOrEmpty(travelBookId)) {
             // start authentication, and set JWTAuthenticationToken to SecurityContext
             try {
                 Jws<Claims> jws = jwtUtil.parseToken(token);
@@ -78,7 +78,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             } catch (JwtException e) {
                 // If jwt token parsed failed, try to refresh token
                 String newToken = jwtUtil.refreshToken(token, travelBookId);
-                if (StringUtils.isNotEmpty(newToken)) {
+                if (!Strings.isNullOrEmpty(newToken)) {
                     JWTAuthenticationToken authentication = new JWTAuthenticationToken(travelBookId,
                             AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
                     SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -23,6 +23,10 @@ public class ControllerUtil {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
     
+    public static ResponseEntity<Response> notFound(Response response) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+    
     public static ResponseEntity<Response> unauthorized(Response response) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }

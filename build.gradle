@@ -25,7 +25,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
-	implementation 'org.apache.commons:commons-lang3:3.9'
+	implementation 'com.google.guava:guava:27.1-jre'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:2.4.1'
 	implementation 'io.jsonwebtoken:jjwt-api:0.10.5'
 	

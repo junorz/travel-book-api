@@ -40,30 +40,29 @@ public class Member {
         return Optional.ofNullable(rep.em().find(Member.class, id));
     }
 
-    public static Member create(MemberCreateDto dto, Repository rep) {
-        TravelBook travelBook = TravelBook.findById(dto.getTravelBookId(), rep);
-        if (travelBook != null) {
+    public static Optional<Member> create(MemberCreateDto dto, Repository rep) {
+        Optional<TravelBook> travelBookOpt = TravelBook.findById(dto.getTravelBookId(), rep);
+        return travelBookOpt.map(t -> {
             Member member = new Member();
             member.setName(dto.getMemberName());
-            member.setTravelBook(travelBook);
+            member.setTravelBook(t);
             rep.em().persist(member);
             return member;
-        }
-        return null;
+        });
     }
     
-    public static Member edit(String memberId, MemberCreateDto dto, Repository rep) {
+    public static Optional<Member> edit(String memberId, MemberCreateDto dto, Repository rep) {
         Optional<Member> memberOpt = findById(memberId, rep);
         memberOpt.ifPresent(member -> {
             member.setName(dto.getMemberName());
             rep.em().merge(member);
         });
-        return memberOpt.orElse(null);
+        return memberOpt;
     }
     
-    public static Member delete(String memberId, Repository rep) {
+    public static Optional<Member> delete(String memberId, Repository rep) {
         Optional<Member> memberOpt = Member.findById(memberId, rep);
         memberOpt.ifPresent(member -> member.setAvaliable(false));
-        return memberOpt.orElse(null);
+        return memberOpt;
     }
 }

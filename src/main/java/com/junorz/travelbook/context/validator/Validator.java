@@ -2,10 +2,11 @@ package com.junorz.travelbook.context.validator;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 
+import com.google.common.base.Strings;
 import com.junorz.travelbook.context.consts.Messages;
+import com.junorz.travelbook.context.exception.ValidationException;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -65,7 +66,7 @@ public class Validator {
      * If travelbook's ID appears in URL, you must verify if the one in URL and the one in request body are the same for security issue.
      */
     public static boolean validateTbId(String idInUrl, String idInReqeustBody) {
-        if (StringUtils.isBlank(idInReqeustBody) || !idInUrl.equals(idInReqeustBody)) {
+        if (Strings.isNullOrEmpty(idInReqeustBody) || !idInUrl.equals(idInReqeustBody)) {
             throw new ValidationException(Messages.BAD_REQUEST);
         }
         return true;
