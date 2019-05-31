@@ -1,5 +1,6 @@
 package com.junorz.travelbook.domain;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import javax.persistence.Entity;
@@ -18,8 +19,10 @@ import lombok.Data;
 
 @Entity
 @Data
-public class SecondaryCategory {
+public class SecondaryCategory implements Serializable {
     
+    private static final long serialVersionUID = 667566355194417815L;
+
     @Id
     @GeneratedValue(generator = "scIdGen")
     @GenericGenerator(name = "scIdGen", strategy = "native")

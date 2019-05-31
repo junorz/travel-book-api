@@ -1,10 +1,12 @@
 package com.junorz.travelbook.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -18,7 +20,9 @@ import lombok.Data;
 
 @Entity
 @Data
-public class PrimaryCategory {
+public class PrimaryCategory implements Serializable {
+
+    private static final long serialVersionUID = 2546266388267883466L;
 
     @Id
     @GeneratedValue(generator = "pcIdGen")
@@ -28,8 +32,8 @@ public class PrimaryCategory {
     @NotNull
     private String name;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "primaryCategory")
-    private List<SecondaryCategory> secondaryCategoryList;
+    @OneToMany(mappedBy = "primaryCategory", cascade = CascadeType.ALL)
+    private List<SecondaryCategory> secondaryCategoryList = new ArrayList<>();
     
     public static Optional<PrimaryCategory> findById(long id, Repository rep) {
         return Optional.ofNullable(rep.em().find(PrimaryCategory.class, id));

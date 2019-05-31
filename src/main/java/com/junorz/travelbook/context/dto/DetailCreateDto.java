@@ -1,5 +1,7 @@
 package com.junorz.travelbook.context.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -11,6 +13,9 @@ public class DetailCreateDto {
     
     @NotNull(message = "{MEMBER_ID_CANNOT_BE_NULL}")
     private String memberId;
+    
+    @NotNull(message = "{MEMBER_ID_CANNOT_BE_NULL}")
+    private List<String> memberList;
     
     @NotNull(message = "{PRIMARY_CATEGORY_ID_CANNOT_BE_NULL}")
     private String primaryCategoryId;

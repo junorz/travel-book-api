@@ -17,6 +17,9 @@ public class TravelBookCreateDto {
     @NotNull(message = "{TRAVELBOOK_PWD_CANNOT_BE_NULL}")
     private String adminPassword;
     
+    @NotNull(message = "{TRAVELBOOK_PWD_CANNOT_BE_NULL}")
+    private String confirmPassword;
+    
     @NotNull(message = "{TRAVELBOOK_CURRENCY_CANNOT_BE_NULL}")
     private String currency;
     

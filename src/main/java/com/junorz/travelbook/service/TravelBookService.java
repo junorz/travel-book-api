@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.google.common.base.Strings;
+import com.junorz.travelbook.context.audit.AuditHandler;
 import com.junorz.travelbook.context.consts.Messages;
 import com.junorz.travelbook.context.dto.TravelBookCreateDto;
 import com.junorz.travelbook.context.orm.Repository;
@@ -24,21 +25,23 @@ import com.junorz.travelbook.utils.MessageUtil;
 
 @Service
 public class TravelBookService {
-    
+
     private final Logger logger = LoggerFactory.getLogger(TravelBookService.class);
 
     private final Repository rep;
     private final PlatformTransactionManager txm;
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
+    private final AuditHandler audit;
 
     @Autowired
     public TravelBookService(Repository rep, PlatformTransactionManager txm, PasswordEncoder passwordEncoder,
-            JWTUtil jwtUtil) {
+            JWTUtil jwtUtil, AuditHandler audit) {
         this.rep = rep;
         this.txm = txm;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.audit = audit;
     }
 
     public List<TravelBook> findAll() {
@@ -50,14 +53,21 @@ public class TravelBookService {
     }
 
     public TravelBook create(TravelBookCreateDto dto) {
-        // encrypt the password
-        dto.setAdminPassword(passwordEncoder.encode(dto.getAdminPassword()));
-        return TxManager.of(txm).tx(() -> TravelBook.create(dto, rep));
+        return audit.audit(Messages.TRAVELBOOK_CREATE_START, () -> {
+            // encrypt the password
+            dto.setAdminPassword(passwordEncoder.encode(dto.getAdminPassword()));
+            TravelBook travelBook = TxManager.of(txm).tx(() -> TravelBook.create(dto, rep));
+            // If created succeed, log details.
+            logger.info(MessageUtil.getMessage(Messages.LOG_TRAVELBOOK_CREATE_SUCCESS), travelBook.getId(),
+                    travelBook.getAccessUrl().getUrl());
+            return travelBook;
+        });
     }
-    
+
     public TravelBook edit(String id, String name, String adminPassword, String currency) {
         // skip password encoding if new password is not set.
-        String encodedAdminPassword = !Strings.isNullOrEmpty(adminPassword) ? passwordEncoder.encode(adminPassword) : null;
+        String encodedAdminPassword = !Strings.isNullOrEmpty(adminPassword) ? passwordEncoder.encode(adminPassword)
+                : null;
         return TxManager.of(txm).tx(() -> TravelBook.edit(id, name, encodedAdminPassword, currency, rep)).orElse(null);
     }
 
@@ -76,7 +86,7 @@ public class TravelBookService {
             Authentication authentication = new JWTAuthenticationToken(id,
                     AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
+
             logger.info(MessageUtil.getMessage(Messages.LOG_AUTHENTICATION_SUCCESS), id);
             return token;
         }

@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,14 +29,11 @@ import com.junorz.travelbook.context.validator.Validator;
 import com.junorz.travelbook.domain.TravelBook;
 import com.junorz.travelbook.service.TravelBookService;
 import com.junorz.travelbook.utils.ControllerUtil;
-import com.junorz.travelbook.utils.MessageUtil;
 
 @RestController
 @RequestMapping("/api/travelbooks")
 @CrossOrigin("*")
 public class TravelBookController {
-
-    private static final Logger logger = LoggerFactory.getLogger(TravelBookController.class);
     
     private final TravelBookService travelBookService;
     private final Response response;
@@ -60,7 +55,8 @@ public class TravelBookController {
     public ResponseEntity<Response> findByUrl(@PathVariable("url") String url) {
         TravelBook travelBook = travelBookService.findByUrl(url);
         Validator.validate(ValidateType.REQUIRED, travelBook, Messages.NO_TRAVELBOOK_FOUND);
-        TravelBookDto data = TravelBookDto.of(travelBook);
+        TravelBookDto data = TravelBookDto.of(travelBook).calculate();
+        
         return ControllerUtil.ok(response.of(data, Messages.FETCH_TRAVELBOOK_BY_URL_SUCCESS));
     }
     
@@ -97,11 +93,14 @@ public class TravelBookController {
 
     @PostMapping("/create")
     public ResponseEntity<Response> create(@RequestBody @Valid TravelBookCreateDto dto) {
+        // Compare if the confirm password is the same with the original one
+        if(!dto.getAdminPassword().equals(dto.getConfirmPassword())) {
+            return ControllerUtil.badRequest(response.of(null, Messages.TRAVELBOOK_PASSWORD_NOT_SAME, Status.FAILED));
+        }
         TravelBook travelBook = travelBookService.create(dto);
         Validator.validate(ValidateType.REQUIRED, travelBook, Messages.TRAVELBOOK_CREATE_FAILED);
 
         TravelBookDto data = TravelBookDto.of(travelBook);
-        logger.info(MessageUtil.getMessage(Messages.LOG_TRAVELBOOK_CREATE_SUCCESS), data.getId());
         return ControllerUtil.ok(response.of(data, Messages.TRAVELBOOK_CREATE_SUCCESS));
     }
 

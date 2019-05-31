@@ -23,6 +23,7 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.junorz.travelbook.config.AppConfig.DefaultValue;
 import com.junorz.travelbook.context.ApplicationInfo;
 import com.junorz.travelbook.context.ApplicationInfo.TokenInfo;
+import com.junorz.travelbook.context.audit.AuditHandler;
 import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.utils.JWTUtil;
 import com.junorz.travelbook.utils.MessageUtil;
@@ -77,6 +78,11 @@ public class AppConfig {
     @Bean
     public Response response() {
         return new Response(messageSource());
+    }
+    
+    @Bean
+    public AuditHandler auditHandler() {
+        return new AuditHandler(messageSource());
     }
 
     @Bean

@@ -1,6 +1,5 @@
 package com.junorz.travelbook.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.junorz.travelbook.context.consts.Messages;
 import com.junorz.travelbook.context.response.Response;
 import com.junorz.travelbook.service.CurrencyService;
+import com.junorz.travelbook.utils.ControllerUtil;
 
 @RestController
 @RequestMapping("/api/travelbooks/currency")
@@ -25,10 +25,15 @@ public class CurrencyController {
         this.response = response;
     }
     
+    @GetMapping("")
+    public ResponseEntity<Response> getAvaliableCurrency() {
+        return ControllerUtil.ok(response.of(currencyService.getAvaliableCurrency(), Messages.AVALIABLE_CURRENCY_FETCH_SUCCESS));
+    }
+    
     @GetMapping("/{originalCurrency}/{targetCurrency}")
     public ResponseEntity<Response> getExchangeRate(@PathVariable("originalCurrency") String originalCurrency, @PathVariable("targetCurrency") String targetCurrency) {
         String data = currencyService.getExchangeRate(originalCurrency, targetCurrency);
-        return ResponseEntity.status(HttpStatus.OK).body(response.of(data, Messages.EXCHANGE_RATE_FETCH_SUCCESS));
+        return ControllerUtil.ok(response.of(data, Messages.EXCHANGE_RATE_FETCH_SUCCESS));
     }
     
 }

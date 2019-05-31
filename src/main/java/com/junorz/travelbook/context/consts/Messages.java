@@ -5,8 +5,10 @@ public interface Messages {
     // TravelBook
     public static String FETCH_TRAVELBOOKS_SUCCESS = "FETCH_TRAVELBOOKS_SUCCESS";
     public static String FETCH_TRAVELBOOK_BY_URL_SUCCESS = "FETCH_TRAVELBOOK_BY_URL_SUCCESS";
+    public static String TRAVELBOOK_CREATE_START = "TRAVELBOOK_CREATE_START";
     public static String TRAVELBOOK_CREATE_SUCCESS = "TRAVELBOOK_CREATE_SUCCESS";
     public static String TRAVELBOOK_CREATE_FAILED = "TRAVELBOOK_CREATE_FAILED";
+    public static String TRAVELBOOK_PASSWORD_NOT_SAME = "TRAVELBOOK_PASSWORD_NOT_SAME";
     public static String TRAVELBOOK_EDIT_SUCCESS = "TRAVELBOOK_EDIT_SUCCESS";
     public static String TRAVELBOOK_DELETE_SUCCESS = "TRAVELBOOK_DELETE_SUCCESS";
     public static String TRAVELBOOK_ID_NOT_SPECIFIED = "TRAVELBOOK_ID_NOT_SPECIFIED";
@@ -28,6 +30,7 @@ public interface Messages {
 
     // Currency
     public static String EXCHANGE_RATE_FETCH_SUCCESS = "EXCHANGE_RATE_FETCH_SUCCESS";
+    public static String AVALIABLE_CURRENCY_FETCH_SUCCESS = "AVALIABLE_CURRENCY_FETCH_SUCCESS";
 
     // Detail
     public static String DETAIL_CREATE_SUCCESS = "DETAIL_CREATE_SUCCESS";
@@ -45,6 +48,7 @@ public interface Messages {
     public static String BAD_REQUEST = "BAD_REQUEST";
     public static String FORBIDDEN = "FORBIDDEN";
     public static String INVALID_OPERATION = "INVALID_OPERATION";
+    public static String RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND";
     
     // Logger
     public static String LOG_AUTHENTICATION_SUCCESS = "LOG_AUTHENTICATION_SUCCESS";

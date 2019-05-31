@@ -1,5 +1,6 @@
 package com.junorz.travelbook.domain;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import javax.persistence.Entity;
@@ -19,7 +20,10 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Member {
+public class Member implements Serializable {
+
+
+    private static final long serialVersionUID = 2035985112426114136L;
 
     @Id
     @GeneratedValue(generator = "memberIdGen")

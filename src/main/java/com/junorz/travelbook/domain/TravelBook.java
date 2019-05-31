@@ -1,5 +1,6 @@
 package com.junorz.travelbook.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,9 @@ import lombok.Data;
 
 @Entity
 @Data
-public class TravelBook {
+public class TravelBook implements Serializable {
+
+    private static final long serialVersionUID = 3825135245467378265L;
 
     @Id
     @GeneratedValue(generator = "travelBookIdGen")
@@ -36,7 +39,7 @@ public class TravelBook {
     @NotNull
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "access_url", referencedColumnName = "url")
     private AccessUrl accessUrl;
 
@@ -46,10 +49,10 @@ public class TravelBook {
     @NotNull
     private Currency currency;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "travelBook")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "travelBook", cascade = CascadeType.PERSIST)
     private List<Member> memeberList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "travelBook")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "travelBook", cascade = CascadeType.PERSIST)
     private List<Detail> detailList;
 
     @NotNull
