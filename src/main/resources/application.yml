@@ -5,7 +5,7 @@ travelbook:
     username: root
     password: 1234
     ddl: update
-    show-sql: true
+    show-sql: false
     create-scheme-ddl-script: false
   
   # Default definition

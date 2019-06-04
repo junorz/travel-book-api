@@ -18,12 +18,15 @@ public interface Messages {
     public static String AUTHENTICATION_FAILED = "AUTHENTICATION_FAILED";
 
     // Member
+    public static String MEMBER_CREATE_START = "MEMBER_CREATE_START";
     public static String MEMBER_CREATE_SUCCESS = "MEMBER_CREATE_SUCCESS";
     public static String MEMBER_EDIT_SUCCESS = "MEMBER_EDIT_SUCCESS";
     public static String MEMBER_EDIT_FAILED = "MEMBER_EDIT_FAILED";
     public static String MEMBER_DELETE_SUCCESS = "MEMBER_DELETE_SUCCESS";
     public static String MEMBER_DELETE_FAILED = "MEMBER_DELETE_FAILED";
     public static String MEMBER_NOT_FOUND = "MEMBER_NOT_FOUND";
+    public static String MEMBER_NAME_DUPLICATE = "MEMBER_NAME_DUPLICATE";
+    public static String MEMBER_RELATED_TO_DETAILS = "MEMBER_RELATED_TO_DETAILS";
 
     // AccessUrl
     public static String NO_ACCESSURL_FOUND = "NO_ACCESSURL_FOUND";
@@ -40,6 +43,7 @@ public interface Messages {
     
     // Primary Category
     public static String PRIMARY_CATEGORY_NOT_FOUND = "PRIMARY_CATEGORY_NOT_FOUND";
+    public static String PRIMARY_CATEGORY_FETCH_SUCCESS = "PRIMARY_CATEGORY_FETCH_SUCCESS";
     
     // Secondary Category
     public static String SECONDARY_CATEGORY_NOT_FOUND = "SECONDARY_CATEGORY_NOT_FOUND";

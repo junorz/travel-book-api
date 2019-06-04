@@ -33,7 +33,8 @@ public class TravelBookDto {
         return new TravelBookDto(travelBook.getId(), travelBook.getName(), travelBook.getAccessUrl().getUrl(),
                 travelBook.getCurrency().toString(),
                 Optional.ofNullable(travelBook.getMemeberList()).orElse(new ArrayList<Member>()).stream()
-                        .filter(member -> member.isAvaliable()).map(member -> MemberDto.of(member))
+                        .filter(member -> member.isAvaliable())
+                        .map(member -> MemberDto.of(member))
                         .collect(Collectors.toList()),
                 Optional.ofNullable(travelBook.getDetailList()).orElse(new ArrayList<Detail>()).stream()
                         .filter(detail -> detail.isAvaliable()).map(detail -> DetailDto.of(detail))

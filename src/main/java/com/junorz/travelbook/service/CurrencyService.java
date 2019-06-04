@@ -1,5 +1,7 @@
 package com.junorz.travelbook.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -24,7 +26,7 @@ public class CurrencyService {
     public String getExchangeRate(String originalCurrency, String targetCurrency) {
         Currency original = Currency.valueOf(originalCurrency);
         Map<String, String> result = CurrencyUtil.getExchangeRate(original);
-        return result.get(targetCurrency);
+        return new BigDecimal(result.get(targetCurrency)).setScale(2, RoundingMode.HALF_UP).toPlainString();
     }
     
 }

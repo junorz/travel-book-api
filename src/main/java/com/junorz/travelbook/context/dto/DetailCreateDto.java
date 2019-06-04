@@ -2,39 +2,41 @@ package com.junorz.travelbook.context.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
 
 @Data
 public class DetailCreateDto {
-    @NotNull(message = "{TRAVELBOOK_ID_CANNOT_BE_NULL}")
+    @NotBlank(message = "{TRAVELBOOK_ID_CANNOT_BE_NULL}")
     private String travelBookId;
     
-    @NotNull(message = "{MEMBER_ID_CANNOT_BE_NULL}")
+    @NotBlank(message = "{MEMBER_ID_CANNOT_BE_NULL}")
     private String memberId;
     
-    @NotNull(message = "{MEMBER_ID_CANNOT_BE_NULL}")
+    @NotEmpty(message = "{MEMBER_ID_CANNOT_BE_NULL}")
     private List<String> memberList;
     
-    @NotNull(message = "{PRIMARY_CATEGORY_ID_CANNOT_BE_NULL}")
+    @NotBlank(message = "{PRIMARY_CATEGORY_ID_CANNOT_BE_NULL}")
     private String primaryCategoryId;
     
-    @NotNull(message = "{SECONDARY_CATEGORY_ID_CANNOT_BE_NULL}")
+    @NotBlank(message = "{SECONDARY_CATEGORY_ID_CANNOT_BE_NULL}")
     private String secondaryCategoryId;
     
-    @NotNull(message = "{DETAIL_AMOUNT_CANNOT_BE_NULL}")
+    @NotBlank(message = "{DETAIL_AMOUNT_CANNOT_BE_NULL}")
     private String amount;
     
-    @NotNull(message = "{DETAIL_CURRENCY_CANNOT_BE_NULL}")
+    @NotBlank(message = "{DETAIL_CURRENCY_CANNOT_BE_NULL}")
     private String currency;
     
-    @NotNull(message = "{DETAIL_EXCHANGE_RATE_CANNOT_BE_NULL}")
+    @NotBlank(message = "{DETAIL_EXCHANGE_RATE_CANNOT_BE_NULL}")
     private String exchangeRate;
     
-    @NotNull(message = "{DETAIL_DATETIME_CANNOT_BE_NULL}")
+    @NotBlank(message = "{DETAIL_DATETIME_CANNOT_BE_NULL}")
     private String dateTime;
     
+    @NotBlank(message = "{DETAIL_REMARKS_CANNOT_BE_NULL}")
     private String remarks;
     
 }

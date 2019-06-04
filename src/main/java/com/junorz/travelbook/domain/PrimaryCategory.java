@@ -35,6 +35,10 @@ public class PrimaryCategory implements Serializable {
     @OneToMany(mappedBy = "primaryCategory", cascade = CascadeType.ALL)
     private List<SecondaryCategory> secondaryCategoryList = new ArrayList<>();
     
+    public static List<PrimaryCategory> findAll(Repository rep) {
+        return rep.em().createQuery("SELECT p FROM PrimaryCategory p", PrimaryCategory.class).getResultList();
+    }
+    
     public static Optional<PrimaryCategory> findById(long id, Repository rep) {
         return Optional.ofNullable(rep.em().find(PrimaryCategory.class, id));
     }

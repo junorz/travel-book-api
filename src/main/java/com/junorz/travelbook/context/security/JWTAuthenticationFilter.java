@@ -25,8 +25,10 @@ import io.jsonwebtoken.JwtException;
 
 /**
  * Do authentication for every request.<br>
- * This filter will get token from request header, and current travelbook's ID from request body.<br>
- * So be sure you have contained travelbook's ID in every request body, or the authentication will failed.
+ * This filter will get token from request header, and current travelbook's ID
+ * from request body.<br>
+ * So be sure you have contained travelbook's ID in every request body, or the
+ * authentication will failed.
  */
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
@@ -48,7 +50,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         response.setHeader("Access-Control-Expose-Headers", "token, tokenRefreshed");
 
         // Get token from header and travelBoodId from body.
-        String token = wrappedRequest.getHeader("token");
+        String token = wrappedRequest.getHeader("Authorization");
 
         BufferedReader reader = wrappedRequest.getReader();
         StringBuilder sb = new StringBuilder();
@@ -66,6 +68,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (!Strings.isNullOrEmpty(token) && !Strings.isNullOrEmpty(travelBookId)) {
+            // cut the "Bearer" prefix
+            token = token.split(" ")[1];
             // start authentication, and set JWTAuthenticationToken to SecurityContext
             try {
                 Jws<Claims> jws = jwtUtil.parseToken(token);

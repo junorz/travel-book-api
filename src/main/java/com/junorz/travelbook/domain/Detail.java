@@ -2,9 +2,11 @@ package com.junorz.travelbook.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.function.Supplier;
 
 import javax.persistence.Column;
@@ -116,7 +118,10 @@ public class Detail implements Serializable {
         detail.setAmount(new BigDecimal(dto.getAmount()));
         detail.setCurrency(Currency.valueOf(dto.getCurrency()));
         detail.setExchangeRate(dto.getExchangeRate());
-        detail.setDateTime(LocalDateTime.parse(dto.getDateTime()));
+        long dateTimeUnix = Long.parseLong(dto.getDateTime());
+        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateTimeUnix),
+                TimeZone.getDefault().toZoneId());
+        detail.setDateTime(dateTime);
         detail.setRemarks(dto.getRemarks());
 
         rep.em().persist(detail);
@@ -143,7 +148,10 @@ public class Detail implements Serializable {
         detail.setAmount(new BigDecimal(dto.getAmount()));
         detail.setCurrency(Currency.valueOf(dto.getCurrency()));
         detail.setExchangeRate(dto.getExchangeRate());
-        detail.setDateTime(LocalDateTime.parse(dto.getDateTime()));
+        long dateTimeUnix = Long.parseLong(dto.getDateTime());
+        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateTimeUnix),
+                TimeZone.getDefault().toZoneId());
+        detail.setDateTime(dateTime);
         detail.setRemarks(dto.getRemarks());
 
         rep.em().merge(detail);

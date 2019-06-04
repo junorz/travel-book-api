@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,7 +47,7 @@ public class DetailController {
         return ControllerUtil.ok(response.of(data, Messages.DETAIL_EDIT_SUCCESS));
     }
     
-    @DeleteMapping("/{id}/delete")
+    @PostMapping("/{id}/delete")
     public ResponseEntity<Response> delete(@PathVariable("id") String id, @RequestBody Map<String, String> params) {
         String travelBookId = params.get("travelBookId");
         Validator.validate(ValidateType.REQUIRED, travelBookId, Messages.TRAVELBOOK_ID_NOT_SPECIFIED);

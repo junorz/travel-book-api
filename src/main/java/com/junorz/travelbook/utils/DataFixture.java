@@ -87,10 +87,8 @@ public class DataFixture {
                 Member m2 = new Member();
                 
                 m1.setName("Member1");
-                m1.setAvaliable(true);
                 m1.setTravelBook(travelBook);
                 m2.setName("Member2");
-                m2.setAvaliable(true);
                 m2.setTravelBook(travelBook);
 
                 List<Member> memberList = ImmutableList.of(m1, m2);

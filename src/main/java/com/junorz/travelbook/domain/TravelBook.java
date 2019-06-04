@@ -10,9 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -27,6 +29,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(indexes = { @Index(name = "access_url_index", columnList = "access_url") })
 public class TravelBook implements Serializable {
 
     private static final long serialVersionUID = 3825135245467378265L;
@@ -72,7 +75,8 @@ public class TravelBook implements Serializable {
 
     public static TravelBook findByUrl(String url, Repository rep) {
         List<TravelBook> travelBookList = rep.em()
-                .createQuery("SELECT tb FROM TravelBook tb WHERE tb.accessUrl = ?1 AND tb.isAvaliable = true", TravelBook.class)
+                .createQuery("SELECT tb FROM TravelBook tb WHERE tb.accessUrl = ?1 AND tb.isAvaliable = true",
+                        TravelBook.class)
                 .setParameter(1, AccessUrl.findByUrl(url, rep)).getResultList();
         return travelBookList.size() == 0 ? null : travelBookList.get(0);
     }

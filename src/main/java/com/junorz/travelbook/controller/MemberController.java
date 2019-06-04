@@ -4,12 +4,9 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,14 +25,11 @@ import com.junorz.travelbook.context.validator.Validator;
 import com.junorz.travelbook.domain.Member;
 import com.junorz.travelbook.service.MemberService;
 import com.junorz.travelbook.utils.ControllerUtil;
-import com.junorz.travelbook.utils.MessageUtil;
 
 @RestController
 @RequestMapping("/api/travelbooks/members")
 @CrossOrigin("*")
 public class MemberController {
-
-    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     private final MemberService memberService;
     private final Response response;
@@ -48,10 +42,6 @@ public class MemberController {
     @PostMapping("/create")
     public ResponseEntity<Response> create(@Valid @RequestBody MemberCreateDto dto) {
         MemberDto data = MemberDto.of(memberService.create(dto));
-
-        logger.info(MessageUtil.getMessage(Messages.LOG_MEMBER_CREATE_SUCCESS), data.getId(), data.getName(),
-                dto.getTravelBookId());
-
         return ControllerUtil.ok(response.of(data, Messages.MEMBER_CREATE_SUCCESS));
     }
 
@@ -63,7 +53,7 @@ public class MemberController {
         return ControllerUtil.ok(response.of(data, Messages.MEMBER_EDIT_SUCCESS));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @PostMapping("/{id}/delete")
     public ResponseEntity<Response> delete(@PathVariable("id") String id, @RequestBody Map<String, String> params) {
         String travelBookId = params.get("travelBookId");
         if (Strings.isNullOrEmpty(travelBookId) || Strings.isNullOrEmpty(id)) {
