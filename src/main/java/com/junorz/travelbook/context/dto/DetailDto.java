@@ -1,6 +1,6 @@
 package com.junorz.travelbook.context.dto;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,21 +14,33 @@ import lombok.Data;
 public class DetailDto {
     private String id;
     private String travelBookId;
+    private long primaryCategoryId;
     private String primaryCategoryName;
+    private long secondaryCategoryId;
     private String secondaryCategoryName;
     private String amount;
-    private String member;
-    private List<String> memberList;
+    private MemberDto member;
+    private List<MemberDto> memberList;
     private String currency;
     private String exchangeRate;
-    private LocalDateTime dateTime;
+    private ZonedDateTime dateTime;
     private String remarks;
 
     public static DetailDto of(Detail detail) {
-        return new DetailDto(detail.getId(), detail.getTravelBook().getId(), detail.getPrimaryCategory().getName(),
-                detail.getSecondaryCategory().getName(), detail.getAmount().toString(), detail.getMember().getName(),
-                detail.getMemberList().stream().map(m -> m.getName()).collect(Collectors.toList()),
-                detail.getCurrency().toString(), detail.getExchangeRate(), detail.getDateTime(),
+        return new DetailDto(
+                detail.getId(), 
+                detail.getTravelBook().getId(), 
+                detail.getPrimaryCategory().getId(),
+                detail.getPrimaryCategory().getName(), 
+                detail.getSecondaryCategory().getId(),
+                detail.getSecondaryCategory().getName(), 
+                detail.getAmount().toString(),
+                MemberDto.of(detail.getMember()),
+                detail.getMemberList().stream().map(m -> MemberDto.of(m)).collect(Collectors.toList()),
+                detail.getCurrency().toString(), 
+                detail.getExchangeRate(), 
+                detail.getDateTime(), 
                 detail.getRemarks());
     }
+
 }

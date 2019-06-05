@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +40,7 @@ public class DetailController {
         return ControllerUtil.ok(response.of(data, Messages.DETAIL_CREATE_SUCCESS));
     }
     
-    @PutMapping("/{id}/edit")
+    @PostMapping("/{id}/edit")
     public ResponseEntity<Response> edit(@PathVariable("id") String id, @RequestBody @Valid DetailCreateDto dto) {
         DetailDto data = DetailDto.of(detailService.edit(id, dto));
         return ControllerUtil.ok(response.of(data, Messages.DETAIL_EDIT_SUCCESS));

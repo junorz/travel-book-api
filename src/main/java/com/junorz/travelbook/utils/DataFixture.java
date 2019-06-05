@@ -2,6 +2,7 @@ package com.junorz.travelbook.utils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -102,7 +103,7 @@ public class DataFixture {
                 d1.setRemarks("remarks 1");
                 d1.setAvaliable(true);
                 d1.setCurrency(Currency.JPY);
-                d1.setDateTime(LocalDateTime.now());
+                d1.setDateTime(ZonedDateTime.now());
                 d1.setExchangeRate("1");
                 d1.setMember(m1);
                 d1.setMemberList(ImmutableList.of(m1, m2));
@@ -114,7 +115,7 @@ public class DataFixture {
                 d2.setRemarks("remarks 2");
                 d2.setAvaliable(true);
                 d2.setCurrency(Currency.JPY);
-                d2.setDateTime(LocalDateTime.now().minusDays(3));
+                d2.setDateTime(ZonedDateTime.now().minusDays(3));
                 d2.setExchangeRate("1");
                 d2.setMember(m2);
                 d2.setMemberList(ImmutableList.of(m1, m2));
@@ -126,7 +127,7 @@ public class DataFixture {
                 d3.setRemarks("remarks 3");
                 d3.setAvaliable(true);
                 d3.setCurrency(Currency.JPY);
-                d3.setDateTime(LocalDateTime.now().minusDays(5));
+                d3.setDateTime(ZonedDateTime.now().minusDays(5));
                 d3.setExchangeRate("1");
                 d3.setMember(m2);
                 d3.setMemberList(ImmutableList.of(m1));

@@ -49,7 +49,7 @@ public class TravelBookDto {
         // calculate total amount
         BigDecimal totalAmount = detailList.stream()
                 .map(d -> new BigDecimal(d.getAmount()).multiply(new BigDecimal(d.getExchangeRate())))
-                .reduce((result, next) -> result.add(next)).get();
+                .reduce((result, next) -> result.add(next)).orElse(BigDecimal.ZERO);
         calculation.setAmount(totalAmount);
 
         // initialize settle details with member name, and set other properties to 0.
@@ -59,7 +59,7 @@ public class TravelBookDto {
         detailList.forEach(d -> {
             // calculate paid amount.
             for (SettleDetail s : calculation.settleDetails) {
-                if (d.getMember().equals(s.getName())) {
+                if (d.getMember().getName().equals(s.getName())) {
                     s.setPaid(s.getPaid().add(new BigDecimal(d.getAmount())));
                     break;
                 }
@@ -71,7 +71,7 @@ public class TravelBookDto {
                     RoundingMode.HALF_UP);
             d.getMemberList().forEach(m -> {
                 for (SettleDetail s : calculation.settleDetails) {
-                    if (m.equals(s.getName())) {
+                    if (m.getName().equals(s.getName())) {
                         s.setAverage(s.getAverage().add(average));
                         break;
                     }

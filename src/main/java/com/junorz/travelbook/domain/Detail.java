@@ -3,7 +3,8 @@ package com.junorz.travelbook.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -85,7 +86,7 @@ public class Detail implements Serializable {
 
     @NotNull
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    private ZonedDateTime dateTime;
 
     private String remarks;
 
@@ -119,7 +120,7 @@ public class Detail implements Serializable {
         detail.setCurrency(Currency.valueOf(dto.getCurrency()));
         detail.setExchangeRate(dto.getExchangeRate());
         long dateTimeUnix = Long.parseLong(dto.getDateTime());
-        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateTimeUnix),
+        ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(dateTimeUnix),
                 TimeZone.getDefault().toZoneId());
         detail.setDateTime(dateTime);
         detail.setRemarks(dto.getRemarks());
@@ -131,10 +132,9 @@ public class Detail implements Serializable {
     public static Detail edit(String id, DetailCreateDto dto, Repository rep) {
         Detail detail = Detail.findById(id, rep).orElseThrow(supplyRnf(Messages.DETAIL_NOT_FOUND));
         Member member = Member.findById(dto.getMemberId(), rep).orElseThrow(supplyRnf(Messages.MEMBER_NOT_FOUND));
-        Builder<Member> listBuilder = ImmutableList.builder();
+        List<Member> memberList = new ArrayList<>();
         dto.getMemberList().forEach(
-                m -> listBuilder.add(Member.findById(m, rep).orElseThrow(supplyRnf(Messages.MEMBER_NOT_FOUND))));
-        List<Member> memberList = listBuilder.build();
+                m -> memberList.add(Member.findById(m, rep).orElseThrow(supplyRnf(Messages.MEMBER_NOT_FOUND))));
         PrimaryCategory primaryCategory = PrimaryCategory.findById(Long.parseLong(dto.getPrimaryCategoryId()), rep)
                 .orElseThrow(supplyRnf(Messages.PRIMARY_CATEGORY_NOT_FOUND));
         SecondaryCategory secondaryCategory = SecondaryCategory
@@ -149,7 +149,7 @@ public class Detail implements Serializable {
         detail.setCurrency(Currency.valueOf(dto.getCurrency()));
         detail.setExchangeRate(dto.getExchangeRate());
         long dateTimeUnix = Long.parseLong(dto.getDateTime());
-        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateTimeUnix),
+        ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(dateTimeUnix),
                 TimeZone.getDefault().toZoneId());
         detail.setDateTime(dateTime);
         detail.setRemarks(dto.getRemarks());

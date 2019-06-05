@@ -19,3 +19,4 @@ travelbook:
     jwt:
       private-key-path: "C:/temp/private.key"
       public-key-path: "C:/temp/public.key"
+     
