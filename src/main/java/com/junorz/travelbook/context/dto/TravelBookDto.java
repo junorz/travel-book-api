@@ -42,9 +42,9 @@ public class TravelBookDto {
                 new Calculation());
     }
 
-    // call this method if you want to calculate settlement result before returning
+    // call this method if you want to calculate settlement before returning
     // to the presentation layer.
-    // no need to call this method if you want to calculate in presentation layer.
+    // P.S. no need to call this method if you want to calculate in presentation layer.(not recommended)
     public TravelBookDto calculate() {
         // calculate total amount
         BigDecimal totalAmount = detailList.stream()

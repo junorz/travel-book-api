@@ -28,18 +28,18 @@ public class DetailDto {
 
     public static DetailDto of(Detail detail) {
         return new DetailDto(
-                detail.getId(), 
-                detail.getTravelBook().getId(), 
+                detail.getId(),
+                detail.getTravelBook().getId(),
                 detail.getPrimaryCategory().getId(),
-                detail.getPrimaryCategory().getName(), 
+                detail.getPrimaryCategory().getName(),
                 detail.getSecondaryCategory().getId(),
-                detail.getSecondaryCategory().getName(), 
+                detail.getSecondaryCategory().getName(),
                 detail.getAmount().toString(),
                 MemberDto.of(detail.getMember()),
                 detail.getMemberList().stream().map(m -> MemberDto.of(m)).collect(Collectors.toList()),
-                detail.getCurrency().toString(), 
-                detail.getExchangeRate(), 
-                detail.getDateTime(), 
+                detail.getCurrency().toString(),
+                detail.getExchangeRate(),
+                detail.getDateTime(),
                 detail.getRemarks());
     }
 
