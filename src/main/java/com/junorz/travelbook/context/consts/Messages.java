@@ -48,6 +48,11 @@ public interface Messages {
     // Secondary Category
     public static String SECONDARY_CATEGORY_NOT_FOUND = "SECONDARY_CATEGORY_NOT_FOUND";
 
+    // Settle
+    public static String FETCH_SETTLES_SUCCESS = "FETCH_SETTLES_SUCCESS";
+    public static String SETTLE_CREATE_SUCCESS = "SETTLE_CREATE_SUCCESS";
+
+
     // System
     public static String BAD_REQUEST = "BAD_REQUEST";
     public static String FORBIDDEN = "FORBIDDEN";
@@ -59,4 +64,5 @@ public interface Messages {
     public static String LOG_TRAVELBOOK_CREATE_SUCCESS = "LOG_TRAVELBOOK_CREATE_SUCCESS";
     public static String LOG_MEMBER_CREATE_SUCCESS = "LOG_MEMBER_CREATE_SUCCESS";
     public static String LOG_DETAIL_CREATE_SUCCESS = "LOG_DETAIL_CREATE_SUCCESS";
+    public static String LOG_SETTLE_CREATE_SUCCESS = "LOG_SETTLE_CREATE_SUCCESS";
 }
