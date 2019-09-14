@@ -1,21 +1,13 @@
 package com.junorz.travelbook.domain;
 
-import java.io.Serializable;
-import java.util.Optional;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
+import com.junorz.travelbook.context.orm.Repository;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.junorz.travelbook.context.orm.Repository;
-
-import lombok.Data;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -34,6 +26,13 @@ public class SecondaryCategory implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "primary_category_id", referencedColumnName = "id")
     private PrimaryCategory primaryCategory;
+
+    public static SecondaryCategory of(String name, PrimaryCategory primaryCategory) {
+        SecondaryCategory secondaryCategory = new SecondaryCategory();
+        secondaryCategory.setName(name);
+        secondaryCategory.setPrimaryCategory(primaryCategory);
+        return secondaryCategory;
+    }
     
     public static Optional<SecondaryCategory> findById(long id, Repository rep) {
         return Optional.ofNullable(rep.em().find(SecondaryCategory.class, id));

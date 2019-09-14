@@ -1,27 +1,22 @@
 package com.junorz.travelbook.utils;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.google.common.collect.ImmutableList;
+import com.junorz.travelbook.context.consts.Currency;
+import com.junorz.travelbook.context.orm.Repository;
+import com.junorz.travelbook.context.orm.TxManager;
+import com.junorz.travelbook.domain.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.google.common.collect.ImmutableList;
-import com.junorz.travelbook.context.consts.Currency;
-import com.junorz.travelbook.context.orm.Repository;
-import com.junorz.travelbook.context.orm.TxManager;
-import com.junorz.travelbook.domain.AccessUrl;
-import com.junorz.travelbook.domain.Detail;
-import com.junorz.travelbook.domain.Member;
-import com.junorz.travelbook.domain.PrimaryCategory;
-import com.junorz.travelbook.domain.SecondaryCategory;
-import com.junorz.travelbook.domain.TravelBook;
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Initialize test data.<p>
@@ -49,36 +44,63 @@ public class DataFixture {
         if (isDataFixture) {
             TxManager.of(txm).tx(() -> {
                 PrimaryCategory p1 = new PrimaryCategory();
-                p1.setName("P1");
+                p1.setName("餐饮费用");
+                SecondaryCategory p1s1 = SecondaryCategory.of("零食饮料", p1);
+                SecondaryCategory p1s2 = SecondaryCategory.of("聚餐吃饭", p1);
+                SecondaryCategory p1s3 = SecondaryCategory.of("风味小吃", p1);
+                p1.setSecondaryCategoryList(new ArrayList<>(Arrays.asList(p1s1, p1s2, p1s3)));
+
                 PrimaryCategory p2 = new PrimaryCategory();
-                p2.setName("P2");
-                
-                SecondaryCategory s1 = new SecondaryCategory();
-                s1.setName("S1");
-                s1.setPrimaryCategory(p1);
+                p2.setName("交通费用");
+                SecondaryCategory p2s1 = SecondaryCategory.of("飞机票", p2);
+                SecondaryCategory p2s2 = SecondaryCategory.of("火车票", p2);
+                SecondaryCategory p2s3 = SecondaryCategory.of("汽车票", p2);
+                SecondaryCategory p2s4 = SecondaryCategory.of("轮船票", p2);
+                SecondaryCategory p2s5 = SecondaryCategory.of("的士费", p2);
+                SecondaryCategory p2s6 = SecondaryCategory.of("租车费", p2);
+                SecondaryCategory p2s7 = SecondaryCategory.of("加油费", p2);
+                SecondaryCategory p2s8 = SecondaryCategory.of("高速费", p2);
+                SecondaryCategory p2s9 = SecondaryCategory.of("停车费", p2);
+                p2.setSecondaryCategoryList(new ArrayList<>(Arrays.asList(p2s1, p2s2, p2s3, p2s4, p2s5, p2s6, p2s7, p2s8, p2s9)));
 
-                SecondaryCategory s2 = new SecondaryCategory();
-                s2.setName("S2");
-                s2.setPrimaryCategory(p1);
+                PrimaryCategory p3 = new PrimaryCategory();
+                p3.setName("娱乐费用");
+                SecondaryCategory p3s1 = SecondaryCategory.of("景点门票", p3);
+                SecondaryCategory p3s2 = SecondaryCategory.of("购物消费", p3);
+                SecondaryCategory p3s3 = SecondaryCategory.of("KTV消费", p3);
+                SecondaryCategory p3s4 = SecondaryCategory.of("旅游团费", p3);
+                SecondaryCategory p3s5 = SecondaryCategory.of("向导费用", p3);
+                p3.setSecondaryCategoryList(new ArrayList<>(Arrays.asList(p3s1, p3s2, p3s3, p3s4, p3s5)));
 
-                SecondaryCategory s3 = new SecondaryCategory();
-                s3.setName("S3");
-                s3.setPrimaryCategory(p1);
+                PrimaryCategory p4 = new PrimaryCategory();
+                p4.setName("住宿费用");
+                SecondaryCategory p4s1 = SecondaryCategory.of("住宿房费", p4);
+                SecondaryCategory p4s2 = SecondaryCategory.of("住宿小费", p4);
+                SecondaryCategory p4s3 = SecondaryCategory.of("停车费用", p4);
+                p4.setSecondaryCategoryList(new ArrayList<>(Arrays.asList(p4s1, p4s2, p4s3)));
 
-                SecondaryCategory s4 = new SecondaryCategory();
-                s4.setName("S4");
-                s4.setPrimaryCategory(p2);
+                PrimaryCategory p5 = new PrimaryCategory();
+                p5.setName("旅游用品");
+                SecondaryCategory p5s1 = SecondaryCategory.of("户外衣裤", p5);
+                SecondaryCategory p5s2 = SecondaryCategory.of("户外衣裤", p5);
+                SecondaryCategory p5s3 = SecondaryCategory.of("数码设备", p5);
+                SecondaryCategory p5s4 = SecondaryCategory.of("个护用品", p5);
+                SecondaryCategory p5s5 = SecondaryCategory.of("其他用品", p5);
+                p5.setSecondaryCategoryList(new ArrayList<>(Arrays.asList(p5s1, p5s2, p5s3, p5s4, p5s5)));
 
-                SecondaryCategory s5 = new SecondaryCategory();
-                s5.setName("S5");
-                s5.setPrimaryCategory(p2);
-                
-                p1.setSecondaryCategoryList(ImmutableList.of(s1, s2, s3));
-                p2.setSecondaryCategoryList(ImmutableList.of(s4, s5));
-                
+                PrimaryCategory p6 = new PrimaryCategory();
+                p6.setName("其他消费");
+                SecondaryCategory p6s1 = SecondaryCategory.of("流量费用", p6);
+                SecondaryCategory p6s2 = SecondaryCategory.of("其他杂费", p6);
+                p6.setSecondaryCategoryList(new ArrayList<>(Arrays.asList(p6s1, p6s2)));
+
                 rep.em().persist(p1);
                 rep.em().persist(p2);
-                
+                rep.em().persist(p3);
+                rep.em().persist(p4);
+                rep.em().persist(p6);
+                rep.em().persist(p6);
+
                 TravelBook travelBook = new TravelBook();
                 AccessUrl accessUrl = new AccessUrl();
                 accessUrl.setUrl(AccessUrlUtil.getUrl());
@@ -108,7 +130,7 @@ public class DataFixture {
                 d1.setMember(m1);
                 d1.setMemberList(ImmutableList.of(m1, m2));
                 d1.setPrimaryCategory(p1);
-                d1.setSecondaryCategory(s1);
+                d1.setSecondaryCategory(p1s1);
                 d1.setTravelBook(travelBook);
                 
                 d2.setAmount(new BigDecimal("5000"));
@@ -120,7 +142,7 @@ public class DataFixture {
                 d2.setMember(m2);
                 d2.setMemberList(ImmutableList.of(m1, m2));
                 d2.setPrimaryCategory(p1);
-                d2.setSecondaryCategory(s2);
+                d2.setSecondaryCategory(p1s2);
                 d2.setTravelBook(travelBook);
                 
                 d3.setAmount(new BigDecimal("23000"));
@@ -132,10 +154,10 @@ public class DataFixture {
                 d3.setMember(m2);
                 d3.setMemberList(ImmutableList.of(m1));
                 d3.setPrimaryCategory(p2);
-                d3.setSecondaryCategory(s4);
+                d3.setSecondaryCategory(p2s1);
                 d3.setTravelBook(travelBook);
                 List<Detail> detailList = ImmutableList.of(d1, d2, d3);
-                
+
                 travelBook.setName("Travelbook");
                 travelBook.setAccessUrl(accessUrl);
                 travelBook.setAdminPassword(passwordEncoder.encode("1234"));
