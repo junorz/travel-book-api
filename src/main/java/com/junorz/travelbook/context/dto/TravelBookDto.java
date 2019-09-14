@@ -70,16 +70,17 @@ public class TravelBookDto {
             // calculate paid amount.
             for (SettleDetail s : calculation.settleDetails) {
                 if (d.getMember().getName().equals(s.getName())) {
-                    s.setPaid(s.getPaid().add(new BigDecimal(d.getAmount())));
+                    s.setPaid(s.getPaid().add(new BigDecimal(d.getAmount())
+                            .multiply(new BigDecimal(d.getExchangeRate()))));
                     break;
                 }
             }
 
             // calculate average amount.
             int memberCount = d.getMemberList().size();
-            BigDecimal average = new BigDecimal(d.getAmount()).divide(new BigDecimal(memberCount), 10,
-                    RoundingMode.HALF_UP);
-            d.getMemberList().forEach(m -> {
+            BigDecimal average = new BigDecimal(d.getAmount()).multiply(new BigDecimal(d.getExchangeRate()))
+                    .divide(new BigDecimal(memberCount), 10, RoundingMode.HALF_UP);
+            d.getMemberList().forEach(m ->
                 calculation.settleDetails.forEach(s -> {
                     if (m.getName().equals(s.getName())) {
                         s.setAverage(s.getAverage().add(average));
@@ -96,8 +97,8 @@ public class TravelBookDto {
                             });
                         }
                     }
-                });
-            });
+                })
+            );
             
         });
         
