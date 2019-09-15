@@ -23,9 +23,10 @@ openssl rsa -in privkey.pem -pubout -out public.pem
 
 ### 2. Run for first time
 modify `resources/application.yml`. change database information and RSA key pair path to fit your environment, 
-and datafixture flag to `true`.
+and `travelbook.datafixture` flag to `true`.
 
-The `datafixture` flag will initialize database.
+The `travelbook.datafixture` flag will initialize database if it set to true.
+
 Please note that you `must` set this flag to `false` after initializing database.
 
 If your have already do manual above, run the following command.
@@ -39,10 +40,10 @@ You will see the following information if your application executed succeed with
 ```
 Started Application in 9.871 seconds (JVM running for 10.751)
 ```
-And you can press `Ctrl+C` to quit.
+And you can just press `Ctrl+C` to quit.
 
 ### 3. Build
-Set `datafixture` flag to `false` in file named `application.yml`.
+Set `travelbook.datafixture` flag to `false`, and `travelbook.datasource.ddl` flag to `none` in file named `application.yml`.
 
 Run the following command to build application to a jar file.
 
